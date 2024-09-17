@@ -8,3 +8,9 @@ export const getCafes = () => {
 export const getEmployee = () => {
     return axios.get(BASE_URL + EMPLOYEES);
 }
+
+export const deleteEmployee = (employeeId) => {
+    return axios.delete(BASE_URL + EMPLOYEES, {
+        params: { _id: employeeId }
+    });
+}

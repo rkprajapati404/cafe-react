@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getCafes, getEmployee } from '../services/CafeService';
+import { deleteEmployee, getCafes, getEmployee } from '../services/CafeService';
 import { Table, Button, Popconfirm } from 'antd';
 
 const Home = () => {
@@ -76,17 +76,21 @@ const Home = () => {
 
   const handleDelete = (id) => {
     console.log('Delete employee with id:', id);
+    deleteEmployee(id).then(response => {
+      setEmployees(employees.filter(emp => emp._id !== id));
+    });
 
   };
 
 
   return (
     <div>
-      <Button type="primary" style={{ marginBottom: 16 }}>Add New Employee</Button>
+      <Button type="primary" style={{ marginBottom: 16, float: 'right' }}>Add New Employee</Button>
       <Table
         dataSource={employees}
         columns={columns}
         rowKey="_id"
+        pagination={false}
       />
     </div>
   )
