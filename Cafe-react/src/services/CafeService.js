@@ -26,3 +26,9 @@ export const deleteEmployee = (employeeId) => {
         params: { _id: employeeId }
     });
 }
+
+export const deleteCafe = (id) => {
+    return axios.delete(BASE_URL + CAFES, {
+        params: { _id: id }
+    });
+}

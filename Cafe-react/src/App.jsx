@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Employees from './pages/employees';
 import './App.css'
-import Cafe from './pages/cafe';
+import Cafes from './pages/cafes';
 import Employee from './pages/employee';
 
 function App() {
@@ -11,11 +11,11 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<Employees />} />
+          <Route path="/" element={<Cafes />} />
           <Route path="/employees" element={<Employees />} />
 
-          <Route path="/cafe" element={<Cafe />} />
-          <Route path="/cafe/:id" element={<Cafe />} />
+          <Route path="/cafes" element={<Cafes />} />
+          {/* <Route path="/cafe/:id" element={<Cafe />} /> */}
 
           <Route path="/employee" element={<Employee />} />
           <Route path="/employee/:id" element={<Employee />} />
