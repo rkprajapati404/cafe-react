@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { deleteEmployee, getEmployee } from '../../services/CafeService';
 import { Table, Button, Popconfirm } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const Home = () => {
+const Employees = () => {
 
   const [employees, setEmployees] = useState([]);
   const navigate = useNavigate();
@@ -66,12 +66,13 @@ const Home = () => {
             <Button type="link">Delete</Button>
           </Popconfirm>
         </span>
-      ),
+      )
     },
   ];
 
   const handleEdit = (id) => {
     console.log('Edit employee with id:', id);
+    navigate("/employee/" + id);
 
   };
 
@@ -83,7 +84,7 @@ const Home = () => {
   };
 
   const handleAdd = () => {
-    navigate("/cafe");
+    navigate("/employee");
   }
 
   return (
@@ -99,4 +100,4 @@ const Home = () => {
   )
 }
 
-export default Home;
+export default Employees;
