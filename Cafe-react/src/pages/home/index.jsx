@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { deleteEmployee, getCafes, getEmployee } from '../services/CafeService';
+import { deleteEmployee, getEmployee } from '../../services/CafeService';
 import { Table, Button, Popconfirm } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Home = () => {
 
   const [employees, setEmployees] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getEmployee().then(response => {
       console.log(response.data);
       setEmployees(response.data);
-
-    })
-  }, [])
+    });
+  }, []);
 
   const columns = [
     {
@@ -79,13 +80,15 @@ const Home = () => {
     deleteEmployee(id).then(response => {
       setEmployees(employees.filter(emp => emp._id !== id));
     });
-
   };
 
+  const handleAdd = () => {
+    navigate("/cafe");
+  }
 
   return (
-    <div>
-      <Button type="primary" style={{ marginBottom: 16, float: 'right' }}>Add New Employee</Button>
+    <div className='container'>
+      <Button onClick={handleAdd} type="primary" style={{ marginBottom: 10, float: 'right' }}>Add New Employee</Button>
       <Table
         dataSource={employees}
         columns={columns}
@@ -96,4 +99,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default Home;
