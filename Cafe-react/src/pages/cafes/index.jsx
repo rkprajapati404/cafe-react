@@ -7,22 +7,29 @@ const { Option } = Select;
 
 const Cafes = () => {
     const [cafes, setCafes] = useState([]);
-    const [locationFilter, setLocationFilter] = useState('');
+    const [allcafes, setAllCafes] = useState([]);
     const navigate = useNavigate();
+    const [location, setLocation] = useState();
 
     useEffect(() => {
-        getCafes().then(response => {
-            console.log(response);
+        getCafes(location).then(response => {
             setCafes(response.data);
+        }).catch(error => {
+            console.log(error);
+        });
+    }, [location]);
+
+
+    useEffect(() => {
+        getCafes(null).then(response => {
+            setAllCafes(response.data);
         }).catch(error => {
             console.log(error);
         });
     }, []);
 
-    const handleLocationFilterChange = (value) => {
-        setLocationFilter(value);
-        const filtered = cafes.filter((cafe) => cafe.location.includes(value));
-        setFilteredCafes(filtered);
+    const handleLocation = (value) => {
+        setLocation(value);
     };
 
     const handleViewEmployees = (id) => {
@@ -57,7 +64,7 @@ const Cafes = () => {
             dataIndex: 'employees',
             key: 'employees',
             render: (employees, record) => (
-                <Button type="link" onClick={() => navigate(`/employee?cafeId=${record._id}`)}>
+                <Button type="link" onClick={() => navigate(`/employees?cafeId=${record._id}`)}>
                     {employees.length}
                 </Button>
             ),
@@ -91,26 +98,22 @@ const Cafes = () => {
 
     return (
         <div>
-            <h1>Café Management</h1>
-
-            {/* Location filter */}
+            <h1 style={{ color: 'black' }}>Café Management</h1>
             <div style={{ marginBottom: 16 }}>
                 <Select
                     placeholder="Filter by Location"
-                    value={locationFilter}
-                    onChange={handleLocationFilterChange}
-                    style={{ width: 200 }}
+                    value={location}
+                    onChange={handleLocation}
+                    style={{ width: 200, marginRight: 20 }}
                 >
                     {
-                        [...new Map(cafes.map(cafe => [cafe.location, cafe])).values()].map(cafe => {
+                        [...new Map(allcafes.map(cafe => [cafe.location, cafe])).values()].map(cafe => {
                             return <Option key={cafe.location} value={cafe.location}>{cafe.location}</Option>;
                         })
 
                     }
                 </Select>
-            </div>
 
-            <div style={{ marginBottom: 16 }}>
                 <Button type="primary" onClick={() => navigate('/add-cafe')}>
                     Add New Café
                 </Button>

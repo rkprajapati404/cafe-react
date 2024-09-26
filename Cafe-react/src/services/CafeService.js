@@ -1,7 +1,13 @@
 import axios from 'axios';
 import { BASE_URL, CAFES, EMPLOYEES } from '../constant/API';
 
-export const getCafes = () => {
+export const getCafes = (location) => {
+    console.log(location);
+    if (location) {
+        return axios.get(BASE_URL + CAFES, {
+            params: { location: location }
+        });
+    }
     return axios.get(BASE_URL + CAFES);
 }
 
