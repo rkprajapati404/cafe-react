@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Select, Space, Popconfirm } from 'antd';
+import { Button, Select, Space, Popconfirm } from 'antd';
+import { AgGridReact } from 'ag-grid-react';
 import { useNavigate } from 'react-router-dom';
 import { deleteCafe, getCafes } from '../../services/CafeService';
+
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
 
 const { Option } = Select;
 
@@ -19,7 +23,6 @@ const Cafes = () => {
         });
     }, [location]);
 
-
     useEffect(() => {
         getCafes(null).then(response => {
             setAllCafes(response.data);
@@ -34,50 +37,65 @@ const Cafes = () => {
 
     const handleViewEmployees = (id) => {
         console.log(id);
-
     };
 
-    const columns = [
+    const handleDelete = async (cafeId) => {
+        deleteCafe(cafeId).then(response => {
+            setCafes(cafes.filter(item => item._id !== cafeId));
+        });
+    };
+
+    const columnDefs = [
         {
-            title: 'Logo',
-            dataIndex: 'logo',
-            key: 'logo',
-            render: (text) => <img src={text || 'default_logo_url'} alt="cafe-logo" width="50" />,
+            headerName: 'Logo',
+            field: 'logo',
+            cellRenderer: (params) => {
+                return (
+                    <img src={params.value || 'default_logo_url'} alt="cafe-logo" width="50" />
+                );
+            },
+            width: 100,
         },
         {
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
+            headerName: 'Name',
+            field: 'name',
+            sortable: true,
+            filter: true,
+            width: 150,
         },
         {
-            title: 'Description',
-            dataIndex: 'description',
-            key: 'description',
+            headerName: 'Description',
+            field: 'description',
+            width: 300,
         },
         {
-            title: 'Location',
-            dataIndex: 'location',
-            key: 'location',
+            headerName: 'Location',
+            field: 'location',
+            width: 150,
+            sortable: true,
+            filter: true,
         },
         {
-            title: 'Employees',
-            dataIndex: 'employees',
-            key: 'employees',
-            render: (employees, record) => (
-                <Button type="link" onClick={() => navigate(`/employees/${record._id}`)}>
-                    {employees.length}
-                </Button>
-            ),
+            headerName: 'Employees',
+            field: 'employees',
+            cellRenderer: (params) => {
+                return (
+                    <Button type="link" onClick={() => navigate(`/employees/${params.data._id}`)}>
+                        {params.value.length}
+                    </Button>
+                );
+            },
+            width: 120,
         },
         {
-            title: 'Actions',
-            key: 'actions',
-            render: (text, record) => (
+            headerName: 'Actions',
+            field: 'actions',
+            cellRenderer: (params) => (
                 <Space>
-                    <Button type="primary" onClick={() => navigate(`/cafe/${record._id}`)}>Edit</Button>
+                    <Button type="primary" onClick={() => navigate(`/cafe/${params.data._id}`)}>Edit</Button>
                     <Popconfirm
                         title="Are you sure delete this cafe?"
-                        onConfirm={() => handleDelete(record._id)}
+                        onConfirm={() => handleDelete(params.data._id)}
                         okText="Yes"
                         cancelText="No"
                     >
@@ -85,19 +103,18 @@ const Cafes = () => {
                     </Popconfirm>
                 </Space>
             ),
+            width: 200,
         },
     ];
 
-
-    // Handle deleting a cafe
-    const handleDelete = async (cafeId) => {
-        deleteCafe(cafeId).then(response => {
-            setCafes(cafes.filter(item => item._id !== cafeId));
-        });
+    const defaultColDef = {
+        flex: 1,
+        minWidth: 100,
+        resizable: true,
     };
 
     return (
-        <div>
+        <div className="ag-theme-alpine" style={{ height: 600, width: '100%' }}>
             <h1 style={{ color: 'black' }}>Cafe Management</h1>
             <div style={{ marginBottom: 16 }}>
                 <Select
@@ -111,7 +128,6 @@ const Cafes = () => {
                         [...new Map(allcafes.map(cafe => [cafe.location, cafe])).values()].map(cafe => {
                             return <Option key={cafe.location} value={cafe.location}>{cafe.location}</Option>;
                         })
-
                     }
                 </Select>
 
@@ -120,7 +136,14 @@ const Cafes = () => {
                 </Button>
             </div>
 
-            <Table columns={columns} dataSource={cafes} rowKey="_id" />
+            <AgGridReact
+                rowData={cafes}
+                columnDefs={columnDefs}
+                defaultColDef={defaultColDef}
+                rowKey="_id"
+                pagination={true}
+                paginationPageSize={10}
+            />
         </div>
     );
 };

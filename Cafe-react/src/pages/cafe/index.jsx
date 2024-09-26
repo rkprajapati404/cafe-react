@@ -88,6 +88,7 @@ const Cafe = () => {
                 description: '',
                 location: '',
             }}
+            style={{ marginTop: 20 }}
         >
 
             <Form.Item
