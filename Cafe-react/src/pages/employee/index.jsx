@@ -66,7 +66,7 @@ const Employee = () => {
                 console.log(result);
                 if (result.status === 201) {
                     message.success('Employee added successfully!');
-                    navigate('/employees');
+                    navigate('/cafes');
                 } else {
                     message.error("Error occured");
                 }
@@ -80,7 +80,7 @@ const Employee = () => {
                 console.log(result);
                 if (result.status === 200) {
                     message.success('Employee Edited successfully!');
-                    navigate('/employees');
+                    navigate('/cafes');
                 } else {
                     message.error("Error occured");
                 }
@@ -92,7 +92,7 @@ const Employee = () => {
     };
 
     const handleCancel = () => {
-        navigate('/employees');
+        navigate('/cafes');
     };
 
     return (

@@ -64,7 +64,7 @@ const Cafes = () => {
             dataIndex: 'employees',
             key: 'employees',
             render: (employees, record) => (
-                <Button type="link" onClick={() => navigate(`/employees?cafeId=${record._id}`)}>
+                <Button type="link" onClick={() => navigate(`/employees/${record._id}`)}>
                     {employees.length}
                 </Button>
             ),
@@ -74,7 +74,7 @@ const Cafes = () => {
             key: 'actions',
             render: (text, record) => (
                 <Space>
-                    <Button type="primary" onClick={() => navigate(`/edit-cafe/${record._id}`)}>Edit</Button>
+                    <Button type="primary" onClick={() => navigate(`/cafe/${record._id}`)}>Edit</Button>
                     <Popconfirm
                         title="Are you sure delete this cafe?"
                         onConfirm={() => handleDelete(record._id)}
@@ -98,12 +98,13 @@ const Cafes = () => {
 
     return (
         <div>
-            <h1 style={{ color: 'black' }}>Café Management</h1>
+            <h1 style={{ color: 'black' }}>Cafe Management</h1>
             <div style={{ marginBottom: 16 }}>
                 <Select
                     placeholder="Filter by Location"
                     value={location}
                     onChange={handleLocation}
+                    allowClear
                     style={{ width: 200, marginRight: 20 }}
                 >
                     {
@@ -114,8 +115,8 @@ const Cafes = () => {
                     }
                 </Select>
 
-                <Button type="primary" onClick={() => navigate('/add-cafe')}>
-                    Add New Café
+                <Button type="primary" onClick={() => navigate('/cafe')}>
+                    Add New Cafe
                 </Button>
             </div>
 

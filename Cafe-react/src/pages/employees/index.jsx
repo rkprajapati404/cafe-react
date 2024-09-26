@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { deleteEmployee, getEmployee } from '../../services/CafeService';
 import { Table, Button, Popconfirm } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Employees = () => {
 
   const [employees, setEmployees] = useState([]);
   const navigate = useNavigate();
+  const { cafeId } = useParams();
 
   useEffect(() => {
-    getEmployee().then(response => {
+    getEmployee(cafeId).then(response => {
       console.log(response.data);
       setEmployees(response.data);
     });
-  }, []);
+  }, [cafeId]);
 
   const columns = [
     {
@@ -86,9 +87,13 @@ const Employees = () => {
   const handleAdd = () => {
     navigate("/employee");
   }
+  const handleBack = () => {
+    navigate("/cafes");
+  }
 
   return (
     <div className='container'>
+      <Button onClick={handleBack} type="primary" style={{ marginLeft: 20, marginBottom: 10, float: 'right' }}>Back</Button>
       <Button onClick={handleAdd} type="primary" style={{ marginBottom: 10, float: 'right' }}>Add New Employee</Button>
       <Table
         dataSource={employees}

@@ -2,7 +2,6 @@ import axios from 'axios';
 import { BASE_URL, CAFES, EMPLOYEES } from '../constant/API';
 
 export const getCafes = (location) => {
-    console.log(location);
     if (location) {
         return axios.get(BASE_URL + CAFES, {
             params: { location: location }
@@ -11,8 +10,10 @@ export const getCafes = (location) => {
     return axios.get(BASE_URL + CAFES);
 }
 
-export const getEmployee = () => {
-    return axios.get(BASE_URL + EMPLOYEES);
+export const getEmployee = (cafeId) => {
+    console.log(cafeId);
+
+    return axios.get(BASE_URL + EMPLOYEES + "/cafe/" + cafeId);
 }
 
 export const getEmployeeById = (id) => {
@@ -34,7 +35,20 @@ export const deleteEmployee = (employeeId) => {
 }
 
 export const deleteCafe = (id) => {
+    console.log(id);
     return axios.delete(BASE_URL + CAFES, {
         params: { _id: id }
     });
+}
+
+export const addCafe = (cafeObject) => {
+    return axios.post(BASE_URL + CAFES, cafeObject);
+}
+
+export const getCafeById = (id) => {
+    return axios.get(BASE_URL + CAFES + "/" + id);
+}
+
+export const editCafe = (cafeObject) => {
+    return axios.put(BASE_URL + CAFES, cafeObject);
 }
